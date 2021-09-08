@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <!-- Package Information -->
+  <name>ov_core</name>
+  <version>1.0.0</version>
+  <description>
+      Core algorithms for visual-inertial navigation algorithms.
+  </description>
+
+  <!-- Code Authors -->
+  <author email="pgeneva@udel.edu">Patrick Geneva</author>
+  <author email="keck@udel.edu">Kevin Eckenhoff</author>
+  <maintainer email="pgeneva@udel.edu">Patrick Geneva</maintainer>
+
+  <!-- Licensing -->
+  <license>GNU General Public License v3.0</license>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

@@ -1,0 +1,5 @@
+<library path="limited_navfn_planner">
+	<class name="lnavfn_planner/LNavfnPlanner" type="lnavfn_planner::LNavfnPlanner" base_class_type="nav2_core::GlobalPlanner">
+	  <description></description>
+	</class>
+</library>

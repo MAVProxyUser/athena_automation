@@ -1,0 +1,56 @@
+
+<!--
+  This Behavior Tree plans the global path
+-->
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="Navigating">
+    <RecoveryNode number_of_retries="60" name="NavigateRecovery">
+      <PipelineSequence name="NavigateWithReplanning">
+        <RateController hz="1.0">
+          <RecoveryNode number_of_retries="100" name="ComputePathToPose">
+              <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+            <PipelineSequence name="ClearGlobalCostmapPipeline">
+                <Wait wait_duration="0.5"/>
+            </PipelineSequence>
+          </RecoveryNode>
+        </RateController>
+        <RecoveryNode number_of_retries="100" name="FollowPath">
+          <FollowPath path="{path}" controller_id="PurePersuit"/>
+          <PipelineSequence name="ClearLocalCostmapPipeline">
+              <Wait wait_duration="0.5"/>
+          </PipelineSequence>
+        </RecoveryNode>
+      </PipelineSequence>
+      <ReactiveFallback name="RecoveryFallback">
+        <GoalUpdated/>
+      </ReactiveFallback>
+    </RecoveryNode>
+  </BehaviorTree>
+  <BehaviorTree ID="Tracking">
+    <PipelineSequence name="NavigateWithReplanning">
+      <Fallback name="ComputePathToPoseFallback">
+        <Inverter>
+          <GoalUpdated/>
+        </Inverter>
+        <GoalUpdater input_goal="{goal}" output_goal="{updated_goal}">
+          <ComputePathToPose goal="{updated_goal}" path="{path}" planner_id="Straight2D"/>
+        </GoalUpdater>
+      </Fallback>
+      <RetryUntilSuccesful num_attempts="100">
+        <FollowPath path="{path}" controller_id="PurePersuit"/>
+      </RetryUntilSuccesful>
+    </PipelineSequence>
+  </BehaviorTree>
+  <!--
+  <include path="/home/mi/nav2_ws/src/navigation2/nav2_bt_navigator/behavior_trees/tracking.xml"/>
+  <include path="/home/mi/nav2_ws/src/navigation2/nav2_bt_navigator/behavior_trees/navigating.xml"/>
+    <SubTree ID="Tracking" __shared_blackboard="true"/>
+  -->
+  <BehaviorTree ID="MainTree">
+      <Switch2 name="navigation" variable="{nav_mode}" case_1="navigating" case_2="tracking">
+      <SubTree ID="Navigating" __shared_blackboard="true"/>
+      <SubTree ID="Tracking" __shared_blackboard="true"/>
+      <Condition ID="SelectMode"/>
+    </Switch2>
+  </BehaviorTree>
+</root>

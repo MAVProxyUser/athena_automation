@@ -1,0 +1,5 @@
+i<library path="dm_planner">
+    <class name="dm_planner/DMPlanner" type="dm_planner::DMPlanner" base_class_type="nav2_core::GlobalPlanner">
+        <description>make a distance map plan base on a straight line from start to goal</description>
+    </class>
+</library>
